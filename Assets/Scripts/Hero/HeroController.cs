@@ -90,14 +90,14 @@ public class HeroController : MonoBehaviour
     {
         distance = Vector3.Distance(transform.position + transform.up, hit.transform.position);
         
-        if(distance < 1.8)
+        if(distance < 2)
         {
             heroInventory.item.Add(hit.transform.GetComponent<Item>());
             Destroy(hit.transform.gameObject);
         }
         else
         {
-            print("Далеко" + distance); //Для теста
+            print("Далеко " + distance); //Для теста
         }
     }
 }

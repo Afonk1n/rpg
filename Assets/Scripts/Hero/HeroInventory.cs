@@ -4,12 +4,18 @@ using UnityEngine;
 
 public class HeroInventory : MonoBehaviour
 {
+    HeroStats heroStats;
+
     public List<Item> item = new List<Item>();
     public List<Drag> drag;
     public GameObject inventory;
 
+    public GameObject cell;
+    public Transform cellParent;
+
     void Start()
     {
+        heroStats = GetComponent<HeroStats>();
         InventoryDisable();
     }
 
@@ -36,9 +42,8 @@ public class HeroInventory : MonoBehaviour
     public void InventoryDisable()
     {
         foreach (Drag drag in drag)
-        {
-            drag.RemoveCell();
-        }
+            Destroy(drag.gameObject);
+        drag.Clear();
 
         inventory.SetActive(false);      
     }
@@ -48,11 +53,17 @@ public class HeroInventory : MonoBehaviour
         inventory.SetActive(true);
 
         foreach (Drag drag in drag)
+            Destroy(drag.gameObject);
+        drag.Clear();
+
+        for (int i = 0; i < item.Count; i++)
         {
-            drag.RemoveCell();
+            GameObject newCell = Instantiate(cell);
+            newCell.transform.SetParent(cellParent, false);
+            drag.Add(newCell.GetComponent<Drag>());
         }
 
-        for(int i = 0; i < item.Count; i++)
+            for (int i = 0; i < item.Count; i++)
         {
             Item it = item[i];
             for(int j = 0; j < drag.Count; j++)
@@ -79,8 +90,18 @@ public class HeroInventory : MonoBehaviour
                     drag[j].image.sprite = Resources.Load<Sprite>(it.pathSprite);
                     drag[j].ownerItem = "myItem";
                     drag[j].countItem++;
+                    drag[j].count.text = "" + drag[j].countItem;
+                    drag[j].heroInventory = this;
                     break;
                 }
+            }
+        }
+        for(int i = drag.Count - 1; i > 0; i--)
+        {
+            if(drag[i].ownerItem == "")
+            {
+                Destroy(drag[i].gameObject);
+                drag.RemoveAt(i);
             }
         }
     }
@@ -95,6 +116,8 @@ public class HeroInventory : MonoBehaviour
     }   
     public void UseItem(Drag drag)
     {
-        print("use"); //Для теста
+        heroStats.AddHealth(drag.item.addHealth);
+        item.Remove(drag.item);
+        InvenrotyEnabled();
     }
 }

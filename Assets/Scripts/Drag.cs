@@ -39,13 +39,5 @@ public class Drag : MonoBehaviour, IPointerClickHandler, IPointerEnterHandler, I
         }
     }
 
-    public void RemoveCell()
-    {
-        item = null;
-        image.sprite = null;
-        countItem = 0;
-        count.text = "";
-        //descriptionCell.text = "";
-        ownerItem = "";
-    }
+   
 }
