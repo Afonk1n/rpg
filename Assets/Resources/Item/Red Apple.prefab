@@ -111,7 +111,7 @@ MonoBehaviour:
   typeItem: Food
   price: 0
   mass: 0
-  addHealth: 0
+  addHealth: 10
   pathSprite: Icon/Apple
   pathPrefab: Item/Red apple
   isStackable: 1
