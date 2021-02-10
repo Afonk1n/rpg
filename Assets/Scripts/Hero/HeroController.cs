@@ -89,11 +89,22 @@ public class HeroController : MonoBehaviour
     void TakeItem(RaycastHit hit)
     {
         distance = Vector3.Distance(transform.position + transform.up, hit.transform.position);
-        
-        if(distance < 2)
+
+        Item it = hit.transform.GetComponent<Item>();
+
+        if (distance < 2.3)
         {
-            heroInventory.item.Add(hit.transform.GetComponent<Item>());
-            Destroy(hit.transform.gameObject);
+            if(it.typeItem == "Food")
+            {
+                heroInventory.food.Add(hit.transform.GetComponent<Item>());
+                Destroy(hit.transform.gameObject);
+            }
+            else if(it.typeItem == "Weapon")
+            {
+                heroInventory.weapon.Add(hit.transform.GetComponent<Item>());
+                Destroy(hit.transform.gameObject);
+            }
+
         }
         else
         {

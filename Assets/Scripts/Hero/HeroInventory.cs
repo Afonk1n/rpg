@@ -6,7 +6,12 @@ public class HeroInventory : MonoBehaviour
 {
     HeroStats heroStats;
 
-    public List<Item> item = new List<Item>();
+    public List<Item> food = new List<Item>();
+    public List<Item> weapon = new List<Item>();
+
+    public int typeOutput;
+
+
     public List<Drag> drag;
     public GameObject inventory;
 
@@ -15,8 +20,8 @@ public class HeroInventory : MonoBehaviour
 
     void Start()
     {
+        typeOutput = 1;
         heroStats = GetComponent<HeroStats>();
-        InventoryDisable();
     }
 
     void Update()
@@ -56,46 +61,102 @@ public class HeroInventory : MonoBehaviour
             Destroy(drag.gameObject);
         drag.Clear();
 
-        for (int i = 0; i < item.Count; i++)
+        /* Исправил баг инвентаря добавлением этого куска кода в ветвление
+         * for (int i = 0; i < food.Count; i++)
         {
             GameObject newCell = Instantiate(cell);
-            newCell.transform.SetParent(cellParent, false);
+            newCell.transform.SetParent(cellParent, false); 
             drag.Add(newCell.GetComponent<Drag>());
-        }
+        }*/
 
-            for (int i = 0; i < item.Count; i++)
+
+        if (typeOutput == 1)
         {
-            Item it = item[i];
-            for(int j = 0; j < drag.Count; j++)
+            for (int i = 0; i < food.Count; i++)
             {
-                if(drag[j].ownerItem != "")
+                GameObject newCell = Instantiate(cell);
+                newCell.transform.SetParent(cellParent, false); 
+                drag.Add(newCell.GetComponent<Drag>());
+            }
+            for (int i = 0; i < food.Count; i++)
+            {
+                Item it = food[i];
+                for (int j = 0; j < drag.Count; j++)
                 {
-                    if (item[i].isStackable)
+                    if (drag[j].ownerItem != "")
                     {
-                        if(drag[j].item.nameItem == it.nameItem)
+                        if (food[i].isStackable)
                         {
-                            drag[j].countItem++;
-                            drag[j].count.text = drag[j].countItem.ToString();
-                            break;
+                            if (drag[j].item.nameItem == it.nameItem)
+                            {
+                                drag[j].countItem++;
+                                drag[j].count.text = drag[j].countItem.ToString();
+                                break;
+                            }
+                        }
+                        else
+                        {
+                            continue;
                         }
                     }
                     else
                     {
-                        continue;
+                        drag[j].item = it;
+                        drag[j].image.sprite = Resources.Load<Sprite>(it.pathSprite);
+                        drag[j].ownerItem = "myItem";
+                        drag[j].countItem++;
+                        drag[j].count.text = "" + drag[j].countItem;
+                        drag[j].heroInventory = this;
+                        break;
                     }
-                }
-                else
-                {
-                    drag[j].item = it;
-                    drag[j].image.sprite = Resources.Load<Sprite>(it.pathSprite);
-                    drag[j].ownerItem = "myItem";
-                    drag[j].countItem++;
-                    drag[j].count.text = "" + drag[j].countItem;
-                    drag[j].heroInventory = this;
-                    break;
                 }
             }
         }
+        else if (typeOutput == 2)
+        {
+            for (int i = 0; i < weapon.Count; i++)
+            {
+                GameObject newCell = Instantiate(cell);
+                newCell.transform.SetParent(cellParent, false);
+                drag.Add(newCell.GetComponent<Drag>());
+            }
+            for (int i = 0; i < weapon.Count; i++)
+            {
+                Item it = weapon[i];
+                for (int j = 0; j < drag.Count; j++)
+                {
+                    if (drag[j].ownerItem != "")
+                    {
+                        if (weapon[i].isStackable)
+                        {
+                            if (drag[j].item.nameItem == it.nameItem)
+                            {
+                                drag[j].countItem++;
+                                drag[j].count.text = drag[j].countItem.ToString();
+                                break;
+                            }
+                        }
+                        else
+                        {
+                            continue;
+                        }
+                    }
+                    else
+                    {
+                        drag[j].item = it;
+                        drag[j].image.sprite = Resources.Load<Sprite>(it.pathSprite);
+                        drag[j].ownerItem = "myItem";
+                        drag[j].countItem++;
+                        drag[j].count.text = "" + drag[j].countItem;
+                        drag[j].heroInventory = this;
+                        break;
+                    }
+                }
+            }
+        }
+
+
+        
         for(int i = drag.Count - 1; i > 0; i--)
         {
             if(drag[i].ownerItem == "")
@@ -106,18 +167,40 @@ public class HeroInventory : MonoBehaviour
         }
     }
 
+    public void OutputFood()
+    {
+        typeOutput = 1;
+        InvenrotyEnabled();
+    }
+    public void OutputWeapon()
+    {
+        typeOutput = 2;
+        InvenrotyEnabled();
+    }
+
+
     public void RemoveItem(Drag drag)
     {
         Item it = drag.item;
         GameObject newObj = Instantiate<GameObject>(Resources.Load<GameObject>(it.pathPrefab));
         newObj.transform.position = transform.position + transform.forward + transform.up;
-        item.Remove(it);
+        food.Remove(it);
+        weapon.Remove(it);
         InvenrotyEnabled();
     }   
     public void UseItem(Drag drag)
     {
-        heroStats.AddHealth(drag.item.addHealth);
-        item.Remove(drag.item);
+        Item it = drag.item;
+        if(it.typeItem == "Food")
+        {
+            heroStats.AddHealth(drag.item.addHealth);
+            food.Remove(drag.item);
+        }
+        else if(it.typeItem == "Weapon")
+        {
+            print("Use sword");
+        }
+        
         InvenrotyEnabled();
     }
 }
