@@ -18,8 +18,11 @@ public class HeroInventory : MonoBehaviour
     public GameObject cell;
     public Transform cellParent;
 
+    public Transform rHand;
+
     void Start()
     {
+        InventoryDisable();
         typeOutput = 1;
         heroStats = GetComponent<HeroStats>();
     }
@@ -60,15 +63,6 @@ public class HeroInventory : MonoBehaviour
         foreach (Drag drag in drag)
             Destroy(drag.gameObject);
         drag.Clear();
-
-        /* Исправил баг инвентаря добавлением этого куска кода в ветвление
-         * for (int i = 0; i < food.Count; i++)
-        {
-            GameObject newCell = Instantiate(cell);
-            newCell.transform.SetParent(cellParent, false); 
-            drag.Add(newCell.GetComponent<Drag>());
-        }*/
-
 
         if (typeOutput == 1)
         {
@@ -157,7 +151,7 @@ public class HeroInventory : MonoBehaviour
 
 
         
-        for(int i = drag.Count - 1; i > 0; i--)
+        for(int i = drag.Count - 1; i >= 0; i--)
         {
             if(drag[i].ownerItem == "")
             {
@@ -198,7 +192,11 @@ public class HeroInventory : MonoBehaviour
         }
         else if(it.typeItem == "Weapon")
         {
-            print("Use sword");
+            GameObject newObj = Instantiate<GameObject>(Resources.Load<GameObject>(it.pathPrefab));
+            newObj.transform.SetParent(rHand);
+            newObj.transform.localPosition = it.position;
+            newObj.transform.localRotation = Quaternion.Euler(it.rotation);
+            newObj.GetComponent<Rigidbody>().isKinematic = true;
         }
         
         InvenrotyEnabled();

@@ -12,4 +12,7 @@ public class Item : MonoBehaviour
     public string pathSprite;
     public string pathPrefab;
     public bool isStackable;
+    public Vector3 position;
+    public Vector3 rotation;
+    public int damage;
 }
