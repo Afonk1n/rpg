@@ -11,7 +11,8 @@ public class HeroInventory : MonoBehaviour
 
     public int typeOutput;
 
-
+    public Drag mainWeapon;
+    public GameObject weaponInHand;
     public List<Drag> drag;
     public GameObject inventory;
 
@@ -191,11 +192,40 @@ public class HeroInventory : MonoBehaviour
         }
         else if(it.typeItem == "Weapon")
         {
-            GameObject newObj = Instantiate<GameObject>(Resources.Load<GameObject>(it.pathPrefab));
-            newObj.transform.SetParent(rHand);
-            newObj.transform.localPosition = it.position;
-            newObj.transform.localRotation = Quaternion.Euler(it.rotation);
-            newObj.GetComponent<Rigidbody>().isKinematic = true;
+            if(drag.ownerItem == "myItem")
+            {
+                GameObject newObj = Instantiate<GameObject>(Resources.Load<GameObject>(it.pathPrefab));
+                newObj.transform.SetParent(rHand);
+                newObj.transform.localPosition = it.position;
+                newObj.transform.localRotation = Quaternion.Euler(it.rotation);
+                newObj.GetComponent<Rigidbody>().isKinematic = true;
+                newObj.GetComponent<BoxCollider>().enabled = false;
+                weaponInHand = newObj;
+
+                mainWeapon.item = it;
+                mainWeapon.image.sprite = Resources.Load<Sprite>(it.pathSprite);
+                mainWeapon.ownerItem = "myWeapon";
+                mainWeapon.countItem++;
+                mainWeapon.count.text = "";
+                mainWeapon.heroInventory = this;
+
+                weapon.Remove(it);
+            }
+            else if (drag.ownerItem == "myWeapon")
+            {
+                weapon.Add(drag.item);
+
+                Destroy(weaponInHand);
+                weaponInHand = null;
+                
+                mainWeapon.item = null;
+                mainWeapon.image.sprite = mainWeapon.defaultSprite;
+                mainWeapon.ownerItem = "";
+                mainWeapon.countItem = 0;
+                mainWeapon.count.text = "";
+                mainWeapon.heroInventory = null;
+            }
+            
         }
         
         InvenrotyEnabled();

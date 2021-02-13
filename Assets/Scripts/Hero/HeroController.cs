@@ -60,8 +60,11 @@ public class HeroController : MonoBehaviour
         }
         else if (hit.transform.tag == "Enemy")
         {
-            targetInteract = hit.transform;
-            act = "Attack";
+            if (heroInventory.weaponInHand != null)
+            {
+                targetInteract = hit.transform;
+                act = "Attack";
+            }
         }
     }
 
