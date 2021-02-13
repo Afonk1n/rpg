@@ -60,6 +60,7 @@
      <Compile Include="Assets\Scripts\Hero\HeroController.cs" />
      <Compile Include="Assets\Scripts\Hero\HeroInventory.cs" />
      <Compile Include="Assets\Scripts\Hero\HeroStats.cs" />
+     <Compile Include="Assets\Scripts\NPC\NPCStats.cs" />
      <Compile Include="Assets\Scripts\Object\Item.cs" />
  <Reference Include="UnityEngine">
  <HintPath>C:/Program Files/Unity/Hub/Editor/2019.4.18f1/Editor/Data/Managed/UnityEngine/UnityEngine.dll</HintPath>

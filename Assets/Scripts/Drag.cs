@@ -31,7 +31,7 @@ public class Drag : MonoBehaviour, IPointerClickHandler, IPointerEnterHandler, I
     {
         if (ownerItem != "")
         {
-            if (eventData.button == PointerEventData.InputButton.Right)
+            if (eventData.button == PointerEventData.InputButton.Right) //&& (ownerItem != "myWeapon") Что бы не выбрасывать одетый предмет
             {
                 heroInventory.RemoveItem(this);
             }

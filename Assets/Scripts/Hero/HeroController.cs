@@ -42,6 +42,7 @@ public class HeroController : MonoBehaviour
         {
             case "Move": Move(); break;
             case "Attack": Attack(); break;
+            case "": Null(); break;
         }
     }
 
@@ -106,7 +107,7 @@ public class HeroController : MonoBehaviour
         anim.SetFloat("Speed", speed);
         speed = Mathf.Clamp(speed, 0, 1);
 
-        if (distance > 2.5f)
+        if (distance > 2f)
         {
             agent.SetDestination(targetInteract.position);
             agent.isStopped = false;
@@ -114,7 +115,7 @@ public class HeroController : MonoBehaviour
             anim.SetBool("Walk", true);
             anim.SetBool("Attack", false);
         }
-        else if (distance <= 2.5f)
+        else if (distance <= 2f)
         {
             speed -= 5 * Time.deltaTime;
             //speed = Mathf.Clamp(speed, 0, 1); Временно убрано №9
@@ -130,6 +131,12 @@ public class HeroController : MonoBehaviour
                 agent.isStopped = true;
             }
         }
+    }
+
+    void Null()
+    {
+        anim.SetBool("Walk", false);
+        anim.SetBool("Attack", false);
     }
 
     void TakeItem(RaycastHit hit)
@@ -155,6 +162,16 @@ public class HeroController : MonoBehaviour
         else
         {
             print("Далеко " + distance); //Для теста
+        }
+    }
+
+    public void Damage()
+    {
+        targetInteract.GetComponent<NPCStats>().TakeAwayHealth(heroInventory.mainWeapon.item.damage);
+        
+        if(targetInteract.GetComponent<NPCStats>().health <= 0)
+        {
+            act = "";
         }
     }
 }
