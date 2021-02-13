@@ -133,6 +133,9 @@ MonoBehaviour:
   pathSprite: Icon/Sword
   pathPrefab: Item/Sword
   isStackable: 0
+  position: {x: -0.662, y: 2.598, z: 1.222}
+  rotation: {x: 0, y: 180, z: -90.00001}
+  damage: 0
 --- !u!54 &919132148177595323
 Rigidbody:
   m_ObjectHideFlags: 0

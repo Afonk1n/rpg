@@ -22,7 +22,6 @@ public class HeroInventory : MonoBehaviour
 
     void Start()
     {
-        InventoryDisable();
         typeOutput = 1;
         heroStats = GetComponent<HeroStats>();
     }
