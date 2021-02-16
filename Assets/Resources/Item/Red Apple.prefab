@@ -112,9 +112,12 @@ MonoBehaviour:
   price: 0
   mass: 0
   addHealth: 10
-  pathSprite: Icon/Apple
+  pathSprite: Icon/AppleRed
   pathPrefab: Item/Red apple
   isStackable: 1
+  position: {x: 0, y: 0, z: 0}
+  rotation: {x: 0, y: 0, z: 0}
+  damage: 0
 --- !u!54 &2119340617
 Rigidbody:
   m_ObjectHideFlags: 0
